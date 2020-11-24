@@ -22,10 +22,13 @@ public class InternetPacket {
     private final StringProperty lastName = new SimpleStringProperty();
     private final StringProperty address = new SimpleStringProperty();
     private IntegerProperty id = new SimpleIntegerProperty();
-    public static List<InternetPacket> packetsSold = new ArrayList<InternetPacket>();
+    
     private static int idC = 0;
-     
-     
+    
+    public static List<InternetPacket> packetsSold = new ArrayList<InternetPacket>();
+    public ArrayList<InternetPacket> getPacketsSold() {
+    	return packetsSold;
+    } 
      
     public InternetPacket(){
     }
@@ -112,28 +115,27 @@ public class InternetPacket {
  
     public ObjectProperty<ArrayList<String>> errorsProperty()
     {
-    return errorList;
+    	return errorList;
     }
      
-    public boolean isValid()
-    {
-    boolean isValid = true;
- 
-    if(firstName.get() != null && firstName.get().equals(""))
-    {
-        errorList.getValue().add("First name can't be empty!");
-        isValid = false;
-    }
-    if(lastName.get().equals(""))
-    {
-        errorList.getValue().add("Last name can't be empty!");
-        isValid = false;
-    }
-    if(address.get().equals(""))
-    {
-        errorList.getValue().add("Address can't be empty!");
-        isValid = false;
-    }
+    public boolean isValid()  {
+    	boolean isValid = true;
+
+    	if(firstName.get() != null && firstName.get().equals(""))
+    	{
+    		errorList.getValue().add("First name can't be empty!");
+    		isValid = false;
+    	}
+    	if(lastName.get().equals(""))
+    	{
+    		errorList.getValue().add("Last name can't be empty!");
+    		isValid = false;
+    	}
+    	if(address.get().equals(""))
+    	{
+    		errorList.getValue().add("Address can't be empty!");
+    		isValid = false;
+    	}
 //    if(contractDuration.get().equals(""))
 //    {
 //        errorList.getValue().add("Contract duration can't be empty!");
@@ -150,17 +152,17 @@ public class InternetPacket {
 //        isValid = false;
 //    }
  
-    return isValid;
+    	return isValid;
     }
-    public boolean save()
-    {
-    if(isValid())
-    {
-        packetsSold.add(this);
-        return true;
-    }
- 
-    return false;
+    
+    public boolean save() {
+    	if(isValid())
+    	{
+    		packetsSold.add(this);
+    		return true;
+    	}
+
+    	return false;
     }
      
 }

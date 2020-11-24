@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -35,11 +37,11 @@ public class FXMLFibraController implements Initializable {
     private Button clearBtn;
     
     @FXML
-    private ChoiceBox speed;
+    private ChoiceBox<String> speed;
     @FXML
-    private ChoiceBox bandwidth;
+    private ChoiceBox<String> bandwidth;
     @FXML
-    private ChoiceBox contractDuration;
+    private ChoiceBox<String> contractDuration;
    
     @FXML
     private TextField firstName;
@@ -123,9 +125,21 @@ public class FXMLFibraController implements Initializable {
     @FXML
     private void accionCerrar(ActionEvent event) {
         // guardar antes de salir
-        Platform.exit();
+    	ArrayList<InternetPacket> lista = ip.getPacketsSold();
+    	lista.forEach( paquete -> { System.out.println(paquete.toString()); });
+    	
+    	
+//    	Alert a = new Alert(AlertType.INFORMATION);
+//		a.initOwner(null);
+//    	a.setTitle("Listado");
+//    	a.setHeaderText("Listado Packetes incluidos");
+//    	lista.forEach( paquete -> { System.out.println(paquete.toString()); });
+//    	a.setContentText(lista.t);
+//    	a.showAndWait();  // es modal, no hara otra cosa hasta pulsar OK
+        // Platform.exit();
     }
-
+    p
+    
     @FXML
     private void accionLImpiar(ActionEvent event) {
         
