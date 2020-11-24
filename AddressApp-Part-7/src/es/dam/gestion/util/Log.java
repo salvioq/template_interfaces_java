@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.converter.LocalDateTimeStringConverter;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
