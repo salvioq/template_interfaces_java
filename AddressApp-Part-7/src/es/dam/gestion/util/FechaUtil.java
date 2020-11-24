@@ -1,15 +1,19 @@
-package ch.makery.address.util;
+package es.dam.gestion.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import es.dam.gestion.modelo.Alumno;
+
+import java.time.Period;
 
 /**
  * Helper functions for handling dates.
  * 
  * @author Marco Jakob
  */
-public class DateUtil {
+public class FechaUtil {
 
     /** The date pattern that is used for conversion. Change as you wish. */
     private static final String DATE_PATTERN = "dd.MM.yyyy";
@@ -20,7 +24,7 @@ public class DateUtil {
 
     /**
      * Returns the given date as a well formatted String. The above defined 
-     * {@link DateUtil#DATE_PATTERN} is used.
+     * {@link FechaUtil#DATE_PATTERN} is used.
      * 
      * @param date the date to be returned as a string
      * @return formatted string
@@ -33,7 +37,7 @@ public class DateUtil {
     }
 
     /**
-     * Converts a String in the format of the defined {@link DateUtil#DATE_PATTERN} 
+     * Converts a String in the format of the defined {@link FechaUtil#DATE_PATTERN} 
      * to a {@link LocalDate} object.
      * 
      * Returns null if the String could not be converted.
@@ -57,6 +61,21 @@ public class DateUtil {
      */
     public static boolean validDate(String dateString) {
         // Try to parse the String.
-        return DateUtil.parse(dateString) != null;
+        return FechaUtil.parse(dateString) != null;
+    }
+    
+    /**
+     * Calcula el periodo entre dos fechas f1 y f2
+     * 
+     * @param f1, f2
+     * @return String con la diferencia en años y meses "x años, y meses"
+     */
+
+    public  String getEdad(Alumno a) {
+    	return FechaUtil.periodoFechas(a.getBirthday(), LocalDate.now());
+    }
+    public static String periodoFechas(LocalDate f1, LocalDate f2) {
+        Period p = Period.between(f1, f2);
+        return (p.getYears()+ " años, " + p.getMonths() + " meses"); 
     }
 }

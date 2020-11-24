@@ -1,12 +1,13 @@
-package ch.makery.address.view;
+package es.dam.gestion.controlador;
 
 import java.io.File;
 
+import es.dam.gestion.AppGestion;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
-import ch.makery.address.MainApp;
 
 /**
  * The controller for the root layout. The root layout provides the basic
@@ -15,17 +16,17 @@ import ch.makery.address.MainApp;
  * 
  * @author Marco Jakob
  */
-public class RootLayoutController {
+public class RaizGestionController {
 
     // Reference to the main application
-    private MainApp mainApp;
+    private AppGestion mainApp;
 
     /**
      * Is called by the main application to give a reference back to itself.
      * 
      * @param mainApp
      */
-    public void setMainApp(MainApp mainApp) {
+    public void setMainApp(AppGestion mainApp) {
         this.mainApp = mainApp;
     }
 
@@ -114,7 +115,8 @@ public class RootLayoutController {
      */
     @FXML
     private void handleExit() {
-        System.exit(0);
+    	Platform.exit();
+        //System.exit(0);
     }
     
     /**

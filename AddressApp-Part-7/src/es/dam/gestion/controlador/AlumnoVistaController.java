@@ -1,4 +1,6 @@
-package ch.makery.address.view;
+package es.dam.gestion.controlador;
+
+
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -6,17 +8,23 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import ch.makery.address.MainApp;
-import ch.makery.address.model.Person;
-import ch.makery.address.util.DateUtil;
 
-public class PersonOverviewController {
+import java.time.LocalDate;
+
+import es.dam.gestion.AppGestion;
+import es.dam.gestion.modelo.Alumno;
+import es.dam.gestion.util.FechaUtil;
+
+
+public class AlumnoVistaController {
     @FXML
-    private TableView<Person> personTable;
+    private TableView<Alumno> personTable;
     @FXML
-    private TableColumn<Person, String> firstNameColumn;
+    private TableColumn<Alumno, String> firstNameColumn;
     @FXML
-    private TableColumn<Person, String> lastNameColumn;
+    private TableColumn<Alumno, String> lastNameColumn;
+    @FXML
+    private TableColumn<Alumno,String> ageColumn;
 
     @FXML
     private Label firstNameLabel;
@@ -30,15 +38,17 @@ public class PersonOverviewController {
     private Label cityLabel;
     @FXML
     private Label birthdayLabel;
+    @FXML
+    private Label ageLabel;
 
     // Reference to the main application.
-    private MainApp mainApp;
+    private AppGestion mainApp;
 
     /**
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public PersonOverviewController() {
+    public AlumnoVistaController() {
     }
 
     /**
@@ -50,6 +60,10 @@ public class PersonOverviewController {
         // Initialize the person table with the two columns.
         firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+        // llenar ageColumn
+        ageColumn.setCellValueFactory(celldata -> celldata.getValue().ageProperty());
+
+      
         
         // Clear person details.
         showPersonDetails(null);
@@ -64,7 +78,7 @@ public class PersonOverviewController {
      * 
      * @param mainApp
      */
-    public void setMainApp(MainApp mainApp) {
+    public void setMainApp(AppGestion mainApp) {
         this.mainApp = mainApp;
 
         // Add observable list data to the table
@@ -75,26 +89,28 @@ public class PersonOverviewController {
      * Fills all text fields to show details about the person.
      * If the specified person is null, all text fields are cleared.
      * 
-     * @param person the person or null
+     * @param alumno the person or null
      */
-    private void showPersonDetails(Person person) {
-        if (person != null) {
+    private void showPersonDetails(Alumno alumno) {
+        if (alumno != null) {
             // Fill the labels with info from the person object.
-            firstNameLabel.setText(person.getFirstName());
-            lastNameLabel.setText(person.getLastName());
-            streetLabel.setText(person.getStreet());
-            postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
-            cityLabel.setText(person.getCity());
-            birthdayLabel.setText(DateUtil.format(person.getBirthday()));
+            firstNameLabel.setText(alumno.getFirstName());
+            lastNameLabel.setText(alumno.getLastName());
+            streetLabel.setText(alumno.getStreet());
+            postalCodeLabel.setText(Integer.toString(alumno.getPostalCode()));
+            cityLabel.setText(alumno.getCity());
+            birthdayLabel.setText(FechaUtil.format(alumno.getBirthday()));
+            ageLabel.setText(getEdad(alumno));
         } else {
-            // Person is null, remove all the text.
-            firstNameLabel.setText("");
-            lastNameLabel.setText("");
-            streetLabel.setText("");
-            postalCodeLabel.setText("");
-            cityLabel.setText("");
-            birthdayLabel.setText("");
-        }
+            // alumno is null, remove all the text.
+            firstNameLabel.setText(""); //$NON-NLS-1$
+            lastNameLabel.setText(""); //$NON-NLS-1$
+            streetLabel.setText(""); //$NON-NLS-1$
+            postalCodeLabel.setText(""); //$NON-NLS-1$
+            cityLabel.setText(""); //$NON-NLS-1$
+            birthdayLabel.setText(""); //$NON-NLS-1$
+            ageLabel.setText(""); //$NON-NLS-1$
+            }
     }
     
     /**
@@ -110,9 +126,8 @@ public class PersonOverviewController {
             Alert alert = new Alert(AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("No Selection");
-            alert.setHeaderText("No Person Selected");
+            alert.setHeaderText("No Alumno Selected");
             alert.setContentText("Please select a person in the table.");
-            
             alert.showAndWait();
         }
     }
@@ -123,7 +138,7 @@ public class PersonOverviewController {
      */
     @FXML
     private void handleNewPerson() {
-        Person tempPerson = new Person();
+        Alumno tempPerson = new Alumno();
         boolean okClicked = mainApp.showPersonEditDialog(tempPerson);
         if (okClicked) {
             mainApp.getPersonData().add(tempPerson);
@@ -136,7 +151,7 @@ public class PersonOverviewController {
      */
     @FXML
     private void handleEditPerson() {
-        Person selectedPerson = personTable.getSelectionModel().getSelectedItem();
+        Alumno selectedPerson = personTable.getSelectionModel().getSelectedItem();
         if (selectedPerson != null) {
             boolean okClicked = mainApp.showPersonEditDialog(selectedPerson);
             if (okClicked) {
@@ -148,10 +163,23 @@ public class PersonOverviewController {
             Alert alert = new Alert(AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("No Selection");
-            alert.setHeaderText("No Person Selected");
+            alert.setHeaderText("No Alumno Selected");
             alert.setContentText("Please select a person in the table.");
             
             alert.showAndWait();
         }
+    }
+    
+     
+    /**
+     * Returns calculated Age from Alumno'sBirthday minus now(),Fills all text fields to show details about the person.
+     * If the specified person is null, all text fields are cleared.
+     * 
+     * @param a (Alumno)
+     * @return the String containing age "x años, y meses"
+     */
+
+    public  String getEdad(Alumno a) {
+    	return FechaUtil.periodoFechas(a.getBirthday(), LocalDate.now());
     }
 }

@@ -1,4 +1,4 @@
-package ch.makery.address;
+package es.dam.gestion;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,14 +21,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import ch.makery.address.model.Person;
-import ch.makery.address.model.PersonListWrapper;
-import ch.makery.address.view.BirthdayStatisticsController;
-import ch.makery.address.view.PersonEditDialogController;
-import ch.makery.address.view.PersonOverviewController;
-import ch.makery.address.view.RootLayoutController;
+import es.dam.gestion.controlador.AlumnoVistaController;
+import es.dam.gestion.controlador.DialogoAlumnoEdicionController;
+import es.dam.gestion.controlador.EstadisticaController;
+import es.dam.gestion.controlador.RaizGestionController;
+import es.dam.gestion.modelo.Alumno;
+import es.dam.gestion.modelo.PersonListWrapper;
 
-public class MainApp extends Application {
+public class AppGestion extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
@@ -36,29 +36,29 @@ public class MainApp extends Application {
     /**
      * The data as an observable list of Persons.
      */
-    private ObservableList<Person> personData = FXCollections.observableArrayList();
+    private ObservableList<Alumno> personData = FXCollections.observableArrayList();
 
     /**
      * Constructor
      */
-    public MainApp() {
+    public AppGestion() {
         // Add some sample data
-        personData.add(new Person("Hans", "Muster"));
-        personData.add(new Person("Ruth", "Mueller"));
-        personData.add(new Person("Heinz", "Kurz"));
-        personData.add(new Person("Cornelia", "Meier"));
-        personData.add(new Person("Werner", "Meyer"));
-        personData.add(new Person("Lydia", "Kunz"));
-        personData.add(new Person("Anna", "Best"));
-        personData.add(new Person("Stefan", "Meier"));
-        personData.add(new Person("Martin", "Mueller"));
+        personData.add(new Alumno("Hans", "Muster"));
+        personData.add(new Alumno("Ruth", "Mueller"));
+        personData.add(new Alumno("Heinz", "Kurz"));
+        personData.add(new Alumno("Cornelia", "Meier"));
+        personData.add(new Alumno("Werner", "Meyer"));
+        personData.add(new Alumno("Lydia", "Kunz"));
+        personData.add(new Alumno("Anna", "Best"));
+        personData.add(new Alumno("Stefan", "Meier"));
+        personData.add(new Alumno("Martin", "Mueller"));
     }
 
     /**
      * Returns the data as an observable list of Persons. 
      * @return
      */
-    public ObservableList<Person> getPersonData() {
+    public ObservableList<Alumno> getPersonData() {
         return personData;
     }
 
@@ -83,8 +83,8 @@ public class MainApp extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class
-                    .getResource("view/RootLayout.fxml"));
+            loader.setLocation(AppGestion.class
+                    .getResource("vista/RaizGestion.fxml"));
             rootLayout = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.
@@ -92,7 +92,7 @@ public class MainApp extends Application {
             primaryStage.setScene(scene);
 
             // Give the controller access to the main app.
-            RootLayoutController controller = loader.getController();
+            RaizGestionController controller = loader.getController();
             controller.setMainApp(this);
 
             primaryStage.show();
@@ -114,14 +114,14 @@ public class MainApp extends Application {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/PersonOverview.fxml"));
+            loader.setLocation(AppGestion.class.getResource("vista/AlumnoVista.fxml"));
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
             rootLayout.setCenter(personOverview);
 
             // Give the controller access to the main app.
-            PersonOverviewController controller = loader.getController();
+            AlumnoVistaController controller = loader.getController();
             controller.setMainApp(this);
 
         } catch (IOException e) {
@@ -137,23 +137,24 @@ public class MainApp extends Application {
      * @param person the person object to be edited
      * @return true if the user clicked OK, false otherwise.
      */
-    public boolean showPersonEditDialog(Person person) {
+    public boolean showPersonEditDialog(Alumno person) {
         try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/PersonEditDialog.fxml"));
+            loader.setLocation(AppGestion.class.getResource("vista/DialogoAlumnoEdicionController.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
 
             // Create the dialog Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Edit Alumno");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
             // Set the person into the controller.
-            PersonEditDialogController controller = loader.getController();
+            DialogoAlumnoEdicionController controller = loader.getController();
+            System.out.println(controller.toString());
             controller.setDialogStage(dialogStage);
             controller.setPerson(person);
             
@@ -177,7 +178,7 @@ public class MainApp extends Application {
         try {
             // Load the fxml file and create a new stage for the popup.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/BirthdayStatistics.fxml"));
+            loader.setLocation(AppGestion.class.getResource("vista/Estadistica.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Birthday Statistics");
@@ -187,7 +188,7 @@ public class MainApp extends Application {
             dialogStage.setScene(scene);
 
             // Set the persons into the controller.
-            BirthdayStatisticsController controller = loader.getController();
+            EstadisticaController controller = loader.getController();
             controller.setPersonData(personData);
 
             // Set the dialog icon.
@@ -208,7 +209,7 @@ public class MainApp extends Application {
      * @return
      */
     public File getPersonFilePath() {
-        Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
+        Preferences prefs = Preferences.userNodeForPackage(AppGestion.class);
         String filePath = prefs.get("filePath", null);
         if (filePath != null) {
             return new File(filePath);
@@ -224,7 +225,7 @@ public class MainApp extends Application {
      * @param file the file or null to remove the path
      */
     public void setPersonFilePath(File file) {
-        Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
+        Preferences prefs = Preferences.userNodeForPackage(AppGestion.class);
         if (file != null) {
             prefs.put("filePath", file.getPath());
 

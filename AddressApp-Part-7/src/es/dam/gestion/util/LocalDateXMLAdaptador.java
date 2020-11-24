@@ -1,4 +1,4 @@
-package ch.makery.address.util;
+package es.dam.gestion.util;
 
 import java.time.LocalDate;
 
@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * 
  * @author Marco Jakob
  */
-public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
+public class LocalDateXMLAdaptador extends XmlAdapter<String, LocalDate> {
 
     @Override
     public LocalDate unmarshal(String v) throws Exception {

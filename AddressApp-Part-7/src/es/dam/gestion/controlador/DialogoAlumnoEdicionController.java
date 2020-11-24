@@ -1,4 +1,4 @@
-package ch.makery.address.view;
+package es.dam.gestion.controlador;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -6,15 +6,18 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import ch.makery.address.model.Person;
-import ch.makery.address.util.DateUtil;
+
+import java.time.LocalDate;
+
+import es.dam.gestion.modelo.Alumno;
+import es.dam.gestion.util.FechaUtil;
 
 /**
  * Dialog to edit details of a person.
  * 
  * @author Marco Jakob
  */
-public class PersonEditDialogController {
+public class DialogoAlumnoEdicionController {
 
     @FXML
     private TextField firstNameField;
@@ -31,7 +34,7 @@ public class PersonEditDialogController {
 
 
     private Stage dialogStage;
-    private Person person;
+    private Alumno person;
     private boolean okClicked = false;
 
     /**
@@ -59,7 +62,7 @@ public class PersonEditDialogController {
      * 
      * @param person
      */
-    public void setPerson(Person person) {
+    public void setPerson(Alumno person) {
         this.person = person;
 
         firstNameField.setText(person.getFirstName());
@@ -67,7 +70,7 @@ public class PersonEditDialogController {
         streetField.setText(person.getStreet());
         postalCodeField.setText(Integer.toString(person.getPostalCode()));
         cityField.setText(person.getCity());
-        birthdayField.setText(DateUtil.format(person.getBirthday()));
+        birthdayField.setText(FechaUtil.format(person.getBirthday()));
         birthdayField.setPromptText("dd.mm.yyyy");
     }
 
@@ -91,7 +94,7 @@ public class PersonEditDialogController {
             person.setStreet(streetField.getText());
             person.setPostalCode(Integer.parseInt(postalCodeField.getText()));
             person.setCity(cityField.getText());
-            person.setBirthday(DateUtil.parse(birthdayField.getText()));
+            person.setBirthday(FechaUtil.parse(birthdayField.getText()));
 
             okClicked = true;
             dialogStage.close();
@@ -123,7 +126,6 @@ public class PersonEditDialogController {
         if (streetField.getText() == null || streetField.getText().length() == 0) {
             errorMessage += "No valid street!\n"; 
         }
-
         if (postalCodeField.getText() == null || postalCodeField.getText().length() == 0) {
             errorMessage += "No valid postal code!\n"; 
         } else {
@@ -142,7 +144,7 @@ public class PersonEditDialogController {
         if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
             errorMessage += "No valid birthday!\n";
         } else {
-            if (!DateUtil.validDate(birthdayField.getText())) {
+            if (!FechaUtil.validDate(birthdayField.getText())) {
                 errorMessage += "No valid birthday. Use the format dd.mm.yyyy!\n";
             }
         }
@@ -162,4 +164,9 @@ public class PersonEditDialogController {
             return false;
         }
     }
+    //metodo 
+    public  String getEdad(Alumno a) {
+    	return FechaUtil.periodoFechas(a.getBirthday(), LocalDate.now());
+    }
+    
 }
